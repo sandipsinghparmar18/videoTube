@@ -28,30 +28,24 @@ const Login = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-
+  
     try {
       dispatch(setLoading(true));
-
-      const response = await fetch(
+  
+      const { data: response } = await axios.post(
         `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/users/login`,
+        formData,
         {
-          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include", // Include cookies in the request
-          body: JSON.stringify(formData), // Send the form data as JSON
+          withCredentials: true, // Ensures cookies are sent with the request
         }
       );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Something went wrong");
-      }
-
-      const responseData = await response.json();
-      const { success, data } = responseData || {};
-
+  
+      // Axios automatically parses JSON, so no need for `.json()`
+      const { success, data } = response || {};
+  
       if (success) {
         dispatch(login(data)); // Dispatch action with user data
         navigate("/home"); // Redirect on successful login
@@ -63,6 +57,7 @@ const Login = () => {
       dispatch(setLoading(false));
     }
   };
+  
 
   return (
     <>
