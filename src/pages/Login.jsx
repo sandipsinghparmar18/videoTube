@@ -6,7 +6,7 @@ import { login } from "../features/slices/authSlice.js";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../features/slices/loaderSlice.js";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
-console.log(import.meta.env.VITE_BACKEND_BASEURL);
+//console.log(import.meta.env.VITE_BACKEND_BASEURL);
 
 const Login = () => {
   const [formData, setFormData] = useState({

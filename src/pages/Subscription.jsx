@@ -34,7 +34,7 @@ function Subscription() {
           },
         }
       );
-      console.log(response);
+      //console.log(response);
 
       const { success, data } = response.data;
       if (success) {

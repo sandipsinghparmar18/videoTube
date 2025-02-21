@@ -35,7 +35,7 @@ function Home() {
         },
       });
       
-      console.log(response);
+      //console.log(response);
       const { success, message } = response.data;
       if (success) {
         setVideos(message.videos);

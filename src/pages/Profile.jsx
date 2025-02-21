@@ -29,7 +29,7 @@ function Profile() {
         const response = await axios.get(
           `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/users/channel/${username}`
         );
-        console.log(response);
+        //console.log(response);
         if (response?.data?.success) {
           const { data: currentUser } = response.data;
           setUser(currentUser);
@@ -54,7 +54,7 @@ function Profile() {
           const dashResponse = await axios.get(
             `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/dashboard/stats/${user._id}`
           );
-          console.log(dashResponse);
+          //console.log(dashResponse);
           if (dashResponse?.data?.success) {
             const { data: dashboard } = dashResponse.data;
             setChannelInfo(dashboard);

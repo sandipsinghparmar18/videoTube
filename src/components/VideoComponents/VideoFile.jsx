@@ -1,5 +1,5 @@
 export default function VideoFile({ video }) {
-  console.log(video);
+  //console.log(video);
   const { videoFile: url = "", title = "No Title Available" } = video || {};
 
   return (

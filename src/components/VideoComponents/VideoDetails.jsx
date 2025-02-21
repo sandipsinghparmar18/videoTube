@@ -46,7 +46,7 @@ function VideoDetails({ video, notify }) {
         );
 
         //console.log(likeResponse);
-        console.log(videoFile);
+        //console.log(videoFile);
 
         const { data: likeData } = likeResponse || {};
         const { data: returnObject } = likeData || {};
