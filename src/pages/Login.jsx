@@ -34,7 +34,7 @@ const Login = () => {
       dispatch(setLoading(true));
   
       const apiUrl = `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/users/login`;
-      console.log("API URL:", apiUrl);
+      //console.log("API URL:", apiUrl);
   
       const response = await fetch(apiUrl, {
         method: "POST",
