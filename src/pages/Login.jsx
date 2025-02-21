@@ -25,44 +25,71 @@ const Login = () => {
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-
+  
     try {
       dispatch(setLoading(true));
-
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/users/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // Include cookies in the request
-          body: JSON.stringify(formData), // Send the form data as JSON
+  
+      const apiUrl = `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/users/login`;
+      console.log("API URL:", apiUrl);
+  
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(formData),
+      });
+  
+      const contentType = response.headers.get("content-type");
+  
+      // If response is JSON, parse it
+      if (contentType && contentType.includes("application/json")) {
+        const responseData = await response.json();
+  
+        if (!response.ok) {
+          let errorMessage = "Something went wrong. Please try again.";
+  
+          if (response.status === 401) {
+            errorMessage = "Invalid username or password";
+          } else if (response.status === 404) {
+            errorMessage = "User not found";
+          } else {
+            errorMessage = responseData.message || errorMessage;
+          }
+  
+          throw new Error(errorMessage);
         }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Something went wrong");
-      }
-
-      const responseData = await response.json();
-      const { success, data } = responseData || {};
-
-      if (success) {
-        dispatch(login(data)); // Dispatch action with user data
-        navigate("/home"); // Redirect on successful login
-        setFormData({ email: "", password: "" }); // Reset form state
+  
+        // Successful login
+        dispatch(login(responseData.data));
+        navigate("/home");
+        setFormData({ email: "", password: "" });
+      } 
+      // If response is HTML (unexpected error), extract text manually
+      else {
+        const errorText = await response.text();
+        console.error("Unexpected HTML response:", errorText);
+  
+        if (errorText.includes("Invalid username or password")) {
+          throw new Error("Invalid username or password");
+        } else if (errorText.includes("User not found")) {
+          throw new Error("User not found");
+        } else {
+          throw new Error("Unexpected server response. Please try again later.");
+        }
       }
     } catch (error) {
-      handleApiError(error, setError);
+      setError(error.message);
+      console.error("Login error:", error.message);
     } finally {
       dispatch(setLoading(false));
     }
-  };
+  };      
 
   return (
     <>
