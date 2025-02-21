@@ -22,6 +22,7 @@ function VideoDetails({ video, notify }) {
   const [loadingPlaylist, setLoadingPlaylist] = useState(false);
 
   const owner = videoFile.owner;
+  
   const user = useSelector((state) => state.user?.userData?.loggedInUser);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -31,18 +32,21 @@ function VideoDetails({ video, notify }) {
       try {
         dispatch(setLoading(true));
         const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/dashboards/stats/${owner._id}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/dashboard/stats/${owner._id}`
         );
-
+        //console.log(response);
         const { data: info } = response || {};
         const { data } = info || {};
-        const { getTotalSubscribers } = data || 0;
+        const { getTotalSubscriber } = data || 0;
         const { subscribedStatus } = data || null;
-        setSubscribers(getTotalSubscribers);
+        setSubscribers(getTotalSubscriber);
         setSubscribed(subscribedStatus);
         const likeResponse = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/likes/v/${videoFile._id}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/likes/video/${videoFile._id}`
         );
+
+        //console.log(likeResponse);
+        console.log(videoFile);
 
         const { data: likeData } = likeResponse || {};
         const { data: returnObject } = likeData || {};
@@ -60,7 +64,7 @@ function VideoDetails({ video, notify }) {
     const fetchPlaylists = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/playlists/user/${user?._id}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/playlist/user/${user?._id}`
         ); // Adjust the URL accordingly
 
         setPlaylists(response?.data?.data);
@@ -111,9 +115,11 @@ function VideoDetails({ video, notify }) {
     if (!data) {
       setSubscribed(true);
       setSubscribers((prev) => prev + 1);
+      localStorage.setItem(`subscribed_${owner._id}`, JSON.stringify(true));
     } else {
       setSubscribed(false);
       setSubscribers((prev) => prev - 1);
+      localStorage.setItem(`subscribed_${owner._id}`, JSON.stringify(false));
     }
   };
 
@@ -122,7 +128,7 @@ function VideoDetails({ video, notify }) {
     try {
       // Make API call to add the video to the playlist
       const response = await axios.patch(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/playlists/add/${videoFile?._id}/${playlistId}`
+        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/playlist/add/${videoFile?._id}/${playlistId}`
       );
 
       // Log and notify success
@@ -152,7 +158,7 @@ function VideoDetails({ video, notify }) {
     setLoadingPlaylist(true);
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/playlists/`,
+        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/playlist/`,
         {
           name: newPlaylistName,
         }

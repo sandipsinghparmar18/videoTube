@@ -23,8 +23,12 @@ function Video() {
           `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/videos/${id}`
         );
 
+        console.log(response);
+
         const { data } = response || {};
-        const { data: videoData } = data || {};
+        const { message : videoData } = data || {};
+
+        //console.log(videoData);
 
         // Check if video was fetched successfully
         if (data.success) {

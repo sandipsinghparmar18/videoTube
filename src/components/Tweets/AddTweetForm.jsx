@@ -43,7 +43,7 @@ function AddTweetForm() {
 
     const url = editing
       ? `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/tweets/${postData?._id}`
-      : `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/tweets/create-Tweet`;
+      : `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/tweets/`;
     const method = editing ? "patch" : "post";
 
     try {

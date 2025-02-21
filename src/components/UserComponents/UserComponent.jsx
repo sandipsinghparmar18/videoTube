@@ -1,10 +1,10 @@
 
 function UserComponent({user}) {
-    const currUser = user
-    
-    return (
-      <div>{currUser?.fullName}</div>
-    )
-  }
+  const currUser = user
   
-  export default UserComponent
+  return (
+    <div>{currUser?.fullName}</div>
+  )
+}
+
+export default UserComponent

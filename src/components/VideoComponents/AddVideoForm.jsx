@@ -62,8 +62,9 @@ function AddVideoForm() {
         }
       );
 
+      console.log(response);
       if (response?.data.success) {
-        const id = response?.data?.data?._id
+        const id = response?.data?.message?._id
         setLoading(false);
         notify("Video uploaded Successfully!!");
         navigate(`/video/${id}`)

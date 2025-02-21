@@ -19,7 +19,11 @@ function VideoComponent({ videofile, notify }) {
   const video = videofile || {};
   const { owner } = video || {};
 
+  //console.log(videofile);
+  //console.log(video);
+
   const user = useSelector((state) => state.user?.userData?.loggedInUser);
+  
   const {id : currPlaylistId}  = useParams();
 
   const getTimeDifference = (createdAt) => {
@@ -74,7 +78,7 @@ function VideoComponent({ videofile, notify }) {
     const fetchPlaylists = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/playlists/user/${user?._id}`
+          `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/playlist/user/${user?._id}`
         ); // Adjust the URL accordingly
 
         setPlaylists(response?.data?.data);
@@ -94,7 +98,7 @@ function VideoComponent({ videofile, notify }) {
     try {
       // Make API call to add the video to the playlist
       const response = await axios.patch(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/playlists/add/${video?._id}/${playlistId}`
+        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/playlist/add/${video?._id}/${playlistId}`
       );
 
       // Log and notify success
@@ -144,7 +148,7 @@ function VideoComponent({ videofile, notify }) {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/playlists/`,
+        `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/playlist/`,
         {
           name: newPlaylistName,
         }

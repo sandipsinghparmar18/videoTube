@@ -29,11 +29,11 @@ function Profile() {
         const response = await axios.get(
           `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/users/channel/${username}`
         );
-
+        console.log(response);
         if (response?.data?.success) {
           const { data: currentUser } = response.data;
           setUser(currentUser);
-          setSubscribers(currentUser.subscribersCount);
+          setSubscribers(currentUser.subscriberCount);
           setSubscribed(currentUser.isSubscribed);
         }
       } catch (error) {
@@ -52,9 +52,9 @@ function Profile() {
       if (user?._id) {
         try {dispatch(setLoading(true));
           const dashResponse = await axios.get(
-            `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/dashboards/stats/${user._id}`
+            `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/dashboard/stats/${user._id}`
           );
-
+          console.log(dashResponse);
           if (dashResponse?.data?.success) {
             const { data: dashboard } = dashResponse.data;
             setChannelInfo(dashboard);
@@ -79,7 +79,7 @@ function Profile() {
 
     const { data: info } = response || {};
     const { data } = info || {};
-    console.log(data)
+    //console.log(data)
     if (!data) {
       setSubscribed(true);
       setSubscribers((prev) => prev + 1);

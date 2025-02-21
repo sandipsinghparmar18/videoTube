@@ -35,13 +35,13 @@ function Home() {
         },
       });
       
-
-      const { success, data } = response.data;
+      console.log(response);
+      const { success, message } = response.data;
       if (success) {
-        setVideos(data.videos);
-        setTotalVideos(data.totalVideos);
+        setVideos(message.videos);
+        setTotalVideos(message.totalVideos);
         setError(null); // Reset error if the request is successful
-      } else if (data.videos.length === 0) {
+      } else if (message.videos.length === 0) {
         setError("No results found.");
       }
     } catch (error) {

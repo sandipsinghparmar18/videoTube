@@ -20,7 +20,7 @@ function Subscription() {
   const user = useSelector((state) => state.user?.userData?.loggedInUser);
   const id = user?._id;
   const dispatch = useDispatch();
-console.log(channels);
+  //console.log(channels);
 
   const fetchVideos = async () => {
     try {
@@ -34,6 +34,7 @@ console.log(channels);
           },
         }
       );
+      console.log(response);
 
       const { success, data } = response.data;
       if (success) {

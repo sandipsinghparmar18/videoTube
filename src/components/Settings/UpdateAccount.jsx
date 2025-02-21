@@ -40,7 +40,7 @@ function UpdateAccount() {
       try {
         dispatch(setLoading(true));
         const response = await axios.patch(
-          `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/users/avatar`,
+          `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/users/update-avatar`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
