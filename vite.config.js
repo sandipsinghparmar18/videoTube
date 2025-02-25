@@ -8,6 +8,7 @@ export default defineConfig({
     proxy: {
       '/api':  'https://backend-hoab.onrender.com',
     },
+    historyApiFallback: true,
   },
   plugins: [react(),
     tailwindcss(),
