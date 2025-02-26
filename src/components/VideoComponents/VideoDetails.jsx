@@ -20,6 +20,7 @@ function VideoDetails({ video, notify }) {
   const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
   const [newPlaylistName, setNewPlaylistName] = useState(null);
   const [loadingPlaylist, setLoadingPlaylist] = useState(false);
+  const loggedInUser = useSelector((state) => state.user.userData.loggedInUser);
 
   const owner = videoFile.owner;
   
@@ -38,7 +39,7 @@ function VideoDetails({ video, notify }) {
         const { data: info } = response || {};
         const { data } = info || {};
         const { getTotalSubscriber } = data || 0;
-        const { subscribedStatus } = data || null;
+        const { subscribedStatus } = data || false;
         setSubscribers(getTotalSubscriber);
         setSubscribed(subscribedStatus);
         const likeResponse = await axios.get(
@@ -104,6 +105,15 @@ function VideoDetails({ video, notify }) {
 
   const onSubscribeClick = async () => {
     const channelId = owner?._id;
+    const loggedInUser = JSON.parse(localStorage.getItem("persist:root"))?.user
+    ? JSON.parse(JSON.parse(localStorage.getItem("persist:root"))?.user)
+        ?.userData?.loggedInUser
+    : null;
+
+    if (loggedInUser?._id === channelId) {
+      notify("You cannot subscribe to your own channel.");
+      return;
+    }
 
     const response = await axios.post(
       `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/subscriptions/c/${channelId}`
@@ -111,15 +121,13 @@ function VideoDetails({ video, notify }) {
 
     const { data: info } = response || {};
     const { data } = info || {};
-
+    //console.log(data)
     if (!data) {
       setSubscribed(true);
       setSubscribers((prev) => prev + 1);
-      localStorage.setItem(`subscribed_${owner._id}`, JSON.stringify(true));
     } else {
       setSubscribed(false);
       setSubscribers((prev) => prev - 1);
-      localStorage.setItem(`subscribed_${owner._id}`, JSON.stringify(false));
     }
   };
 
@@ -348,7 +356,7 @@ function VideoDetails({ video, notify }) {
           )}
         </div>
         <div className="self-center ">
-          <SubscribeButton onclick={onSubscribeClick} subscribed={subscribed} />
+          <SubscribeButton onclick={onSubscribeClick} subscribed={subscribed} disabled={user?._id === loggedInUser?._id} />
         </div>
         <div className="flex">
           <LikeButton onclick={onclick} liked={liked} />

@@ -8,8 +8,9 @@ import {
   UserPlaylists,
 } from "../components";
 import { toast, ToastContainer } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../features/slices/loaderSlice.js";
+
 
 function Profile() {
   const { username } = useParams();
@@ -20,6 +21,7 @@ function Profile() {
   const [activeDiv, setActiveDiv] = useState(1);
   const notify = (text) => toast(text);
   const dispatch = useDispatch();
+  const loggedInUser = useSelector((state) => state.user.userData.loggedInUser);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -71,7 +73,16 @@ function Profile() {
   }, [user]); // This effect will only run when 'user' is updated
 
   const onSubscribeClick = async () => {
-    const channelId = user?._id;
+    const channelId = user?._id; 
+    const loggedInUser = JSON.parse(localStorage.getItem("persist:root"))?.user
+    ? JSON.parse(JSON.parse(localStorage.getItem("persist:root"))?.user)
+        ?.userData?.loggedInUser
+    : null;
+
+    if (loggedInUser?._id === channelId) {
+      notify("You cannot subscribe to your own channel.");
+      return;
+    }
 
     const response = await axios.post(
       `${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/subscriptions/c/${channelId}`
@@ -117,6 +128,7 @@ function Profile() {
               <SubscribeButton
                 onclick={onSubscribeClick}
                 subscribed={subscribed}
+                disabled={user?._id === loggedInUser?._id}
               />
             </span>
           </div>
