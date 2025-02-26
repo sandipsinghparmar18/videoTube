@@ -49,6 +49,9 @@ function AddVideoForm() {
       data.append("thumbnail", thumbnailRef.current.files[0]);
     }
 
+    console.log(data);
+    console.log(import.meta.env.VITE_BACKEND_BASEURL);
+
     try {
       dispatch(setLoading(true));
   
