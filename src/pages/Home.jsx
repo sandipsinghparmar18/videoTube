@@ -24,11 +24,7 @@ function Home() {
   const fetchVideos = async () => {
     dispatch(setLoading(true));
     try {
-      const accessToken = localStorage.getItem("accessToken");
       const response = await axios.get(`${import.meta.env.VITE_BACKEND_BASEURL}/api/v1/videos`, {
-        headers: {
-          "Authorization": `Bearer ${accessToken}`
-        },
         withCredentials: true, // Include this in the same configuration object
         params: {
           page: currentPage,
