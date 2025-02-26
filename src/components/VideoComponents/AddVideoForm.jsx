@@ -49,8 +49,8 @@ function AddVideoForm() {
       data.append("thumbnail", thumbnailRef.current.files[0]);
     }
 
-    console.log(data);
-    console.log(import.meta.env.VITE_BACKEND_BASEURL);
+    //console.log(data);
+    //console.log(import.meta.env.VITE_BACKEND_BASEURL);
 
     try {
       dispatch(setLoading(true));
@@ -66,7 +66,7 @@ function AddVideoForm() {
         }
       );
 
-      //console.log(response);
+      console.log(response);
       if (response?.data.success) {
         const id = response?.data?.message?._id
         setLoading(false);
